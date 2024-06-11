@@ -1,10 +1,7 @@
 
 let Data;
 
-function resetSearch() {
-  document.querySelector(".search-input").value = "";
-  displayResults([]);
-}
+
 
 function fetchData() {
   const keyword = document
@@ -33,6 +30,41 @@ function fetchData() {
     });
 }
 
+function resetSearch() {
+    document.querySelector(".search-input").value = "";
+    displayResults([]);
+  }
+
+function filterResults(keyword) {
+    const filteredCities = [];
+  
+    Data.countries.forEach((country) => {
+      country.cities.forEach((city) => {
+        if (
+          city.name.toLowerCase().includes(keyword) ||
+          city.description.toLowerCase().includes(keyword)
+        ) {
+          filteredCities.push(city);
+        }
+      });
+    });
+  
+    if (keyword.toLowerCase().includes("temple")) {
+      Data.temples.forEach((temple) => {
+        filteredCities.push(temple);
+      });
+    }
+  
+    if (keyword.toLowerCase().includes("beach")) {
+      Data.beaches.forEach((beach) => {
+        filteredCities.push(beach);
+      });
+    }
+  
+    displayResults(filteredCities);
+  }
+  
+
 function displayResults(results) {
   const cardsContainer = document.getElementById("displayData");
   cardsContainer.innerHTML = "";
@@ -47,33 +79,4 @@ function displayResults(results) {
     `;
     cardsContainer.innerHTML += card;
   });
-}
-
-function filterResults(keyword) {
-  const filteredCities = [];
-
-  Data.countries.forEach((country) => {
-    country.cities.forEach((city) => {
-      if (
-        city.name.toLowerCase().includes(keyword) ||
-        city.description.toLowerCase().includes(keyword)
-      ) {
-        filteredCities.push(city);
-      }
-    });
-  });
-
-  if (keyword.toLowerCase().includes("temple")) {
-    Data.temples.forEach((temple) => {
-      filteredCities.push(temple);
-    });
-  }
-
-  if (keyword.toLowerCase().includes("beach")) {
-    Data.beaches.forEach((beach) => {
-      filteredCities.push(beach);
-    });
-  }
-
-  displayResults(filteredCities);
 }
